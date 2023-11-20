@@ -1,1 +1,52 @@
+package funciones;
+import java.util.Scanner;
+public class funciones {
+    public static void inicioSesion() {
+        System.out.println("Seleccione una opción: \n" +
+                "1.- Iniciar sesión.\n" +
+                "2.- Salir.");
+    }
+    public static int si() {
+        Scanner escaner = new Scanner(System.in);
+        int opcionInt = Integer.parseInt(escaner.nextLine());
+        return opcionInt;
+    }
+    public static String ss() {
+        Scanner escaner = new Scanner(System.in);
+        String opcionString = escaner.nextLine();
+        return opcionString;
+    }
 
+    public static String usuarioAdministrador = "administrador";
+    public static String contrasenaAdministrador = "1234";
+    public static String usuarioGestor = "gestor";
+    public static String contrasenaGestor = "1234";
+    public static String usuarioInversor = "inversor";
+    public static String contrasenaInversor = "1234";
+
+    public static boolean validacion() {
+        System.out.print("Usuario: ");
+        String usuario = ss();
+        System.out.print("Contraseña: ");
+        String contrasena = ss();
+        return usuario.equals(usuarioAdministrador) && contrasena.equals(contrasenaAdministrador) || usuario.equals(usuarioGestor) && contrasena.equals(contrasenaGestor) || usuario.equals(usuarioInversor) && contrasena.equals(contrasenaInversor);
+    }
+}
+import java.util.Scanner;
+import static funciones.funciones.*;
+public class penelope {
+    public static void main (String[] args) {
+        int respuesta = 0;
+        do {
+            inicioSesion();
+            respuesta = si();
+            switch (respuesta) {
+                case 1: {
+                    if (validacion()) System.out.println("Has entrado");
+                    else System.out.println("no has entrado");
+
+                }
+            }
+        }while(respuesta != 2);
+    }
+}
