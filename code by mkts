@@ -1,1 +1,189 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+public class Final {
+        // Usuarios
+        private static final String ADMIN_USUARIO = "admin";
+        private static final String ADMIN_CONTRASENA = "adminpass";
+        private static final String GESTOR_USUARIO = "gestor";
+        private static final String GESTOR_CONTRASENA = "gestorpass";
+        private static final String INVERSOR1_USUARIO = "inversor1";
+        private static final String INVERSOR1_CONTRASENA = "inversorpass1";
+        private static final String INVERSOR2_USUARIO = "inversor2";
+        private static final String INVERSOR2_CONTRASENA = "inversorpass2";
 
+        // Contadores de intentos fallidos
+        private static int intentosFallidosGestor = 0;
+        private static int intentosFallidosInversor1 = 0;
+        private static int intentosFallidosInversor2 = 0;
+
+        // Proyectos
+        private static String nombreProyecto1;
+        private static String descripcionProyecto1;
+        private static String tipoProyecto1;
+        private static double cantidadNecesariaProyecto1;
+        private static double cantidadFinanciadaProyecto1;
+        private static String fechaInicioProyecto1;
+        private static String fechaFinProyecto1;
+
+        private static String nombreProyecto2;
+        private static String descripcionProyecto2;
+        private static String tipoProyecto2;
+        private static double cantidadNecesariaProyecto2;
+        private static double cantidadFinanciadaProyecto2;
+        private static String fechaInicioProyecto2;
+        private static String fechaFinProyecto2;
+
+        private static String nombreProyecto3;
+        private static String descripcionProyecto3;
+        private static String tipoProyecto3;
+        private static double cantidadNecesariaProyecto3;
+        private static double cantidadFinanciadaProyecto3;
+        private static String fechaInicioProyecto3;
+        private static String fechaFinProyecto3;
+
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+
+            // Inicio de sesión
+            System.out.println("Bienvenido al sistema de proyectos. Por favor, inicia sesión.");
+
+            while (true) {
+                System.out.print("Usuario: ");
+                String usuario = scanner.nextLine();
+                System.out.print("Contraseña: ");
+                String contrasena = scanner.nextLine();
+
+                if (validarCredenciales(usuario, contrasena)) {
+                    System.out.println("Inicio de sesión exitoso.");
+                    break;
+                } else {
+                    System.out.println("Credenciales incorrectas. Intenta nuevamente.");
+                }
+            }
+
+            // Menú principal
+            while (true) {
+                System.out.println("\nMenú Principal:");
+                System.out.println("1. Crear proyecto (Solo para gestor)");
+                System.out.println("2. Participar en proyecto (Solo para inversores)");
+                System.out.println("3. Salir");
+
+                int opcion = scanner.nextInt();
+                scanner.nextLine();  // Consumir el salto de línea
+
+                switch (opcion) {
+                    case 1:
+                        if (esGestor()) {
+                            crearProyecto(scanner);
+                        } else {
+                            System.out.println("Acceso denegado. Solo los gestores pueden crear proyectos.");
+                        }
+                        break;
+                    case 2:
+                        if (esInversor()) {
+                            participarEnProyecto(scanner);
+                        } else {
+                            System.out.println("Acceso denegado. Solo los inversores pueden participar en proyectos.");
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Sesión cerrada. ¡Hasta luego!");
+                        return;
+                    default:
+                        System.out.println("Opción no válida. Inténtalo de nuevo.");
+                }
+            }
+        }
+
+        // Funciones auxiliares
+
+        private static boolean validarCredenciales(String usuario, String contrasena) {
+            if (usuario.equals(ADMIN_USUARIO) && contrasena.equals(ADMIN_CONTRASENA)) {
+                return true;
+            } else if (usuario.equals(GESTOR_USUARIO) && contrasena.equals(GESTOR_CONTRASENA)) {
+                resetearIntentosFallidosGestor();
+                return true;
+            } else if (usuario.equals(INVERSOR1_USUARIO) && contrasena.equals(INVERSOR1_CONTRASENA)) {
+                resetearIntentosFallidosInversor1();
+                return true;
+            } else if (usuario.equals(INVERSOR2_USUARIO) && contrasena.equals(INVERSOR2_CONTRASENA)) {
+                resetearIntentosFallidosInversor2();
+                return true;
+            } else {
+                // Credenciales incorrectas, incrementar intentos fallidos
+                incrementarIntentosFallidos(usuario);
+                return false;
+            }
+        }
+
+        private static boolean esGestor() {
+            return ADMIN_USUARIO.equals(ADMIN_USUARIO);  // Cambiar si es necesario agregar lógica específica para gestores
+        }
+
+        private static boolean esInversor() {
+            return ADMIN_USUARIO.equals(INVERSOR1_USUARIO) || ADMIN_USUARIO.equals(INVERSOR2_USUARIO);  // Cambiar si es necesario agregar lógica específica para inversores
+        }
+
+        private static void incrementarIntentosFallidos(String usuario) {
+            if (usuario.equals(GESTOR_USUARIO)) {
+                intentosFallidosGestor++;
+                if (intentosFallidosGestor == 3) {
+                    System.out.println("Usuario gestor bloqueado. Contacta al administrador para desbloquear.");
+                }
+            } else if (usuario.equals(INVERSOR1_USUARIO)) {
+                intentosFallidosInversor1++;
+                if (intentosFallidosInversor1 == 3) {
+                    System.out.println("Usuario inversor 1 bloqueado. Contacta al administrador para desbloquear.");
+                }
+            } else if (usuario.equals(INVERSOR2_USUARIO)) {
+                intentosFallidosInversor2++;
+                if (intentosFallidosInversor2 == 3) {
+                    System.out.println("Usuario inversor 2 bloqueado. Contacta al administrador para desbloquear.");
+                }
+            }
+        }
+
+        private static void resetearIntentosFallidosGestor() {
+            intentosFallidosGestor = 0;
+        }
+
+        private static void resetearIntentosFallidosInversor1() {
+            intentosFallidosInversor1 = 0;
+        }
+
+        private static void resetearIntentosFallidosInversor2() {
+            intentosFallidosInversor2 = 0;
+        }
+
+        private static void crearProyecto(Scanner scanner) {
+            if (nombreProyecto1 == null) {
+                System.out.println("Ingrese información para el proyecto 1:");
+                System.out.print("Nombre: ");
+                nombreProyecto1 = scanner.nextLine();
+                System.out.print("Descripción: ");
+                descripcionProyecto1 = scanner.nextLine();
+                System.out.print("Tipo (préstamo, plusvalía o alquiler): ");
+                tipoProyecto1 = scanner.nextLine();
+                System.out.print("Cantidad necesaria: ");
+                cantidadNecesariaProyecto1 = scanner.nextDouble();
+                System.out.print("Cantidad financiada hasta el momento: ");
+                cantidadFinanciadaProyecto1 = scanner.nextDouble();
+                System.out.print("Fecha inicio: ");
+                fechaInicioProyecto1 = scanner.next();
+                System.out.print("Fecha fin: ");
+                fechaFinProyecto1 = scanner.next();
+                System.out.println("Proyecto 1 creado exitosamente.");
+            } else if (nombreProyecto2 == null) {
+                // Repetir proceso para el proyecto 2 (puedes extender para el proyecto 3)
+            } else if (nombreProyecto3 == null) {
+                // Repetir proceso para el proyecto 3
+            } else {
+                System.out.println("Ya has alcanzado el límite de proyectos. No puedes crear más proyectos.");
+            }
+        }
+        private static void participarEnProyecto(Scanner scanner) {
+            // Lógica para que inversores participen en proyectos
+            // Puedes implementar según tus necesidades específicas
+        }
+    }
