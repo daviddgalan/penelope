@@ -29,7 +29,23 @@ public class funciones {
         String usuario = ss();
         System.out.print("Contraseña: ");
         String contrasena = ss();
-        return usuario.equals(usuarioAdministrador) && contrasena.equals(contrasenaAdministrador) || usuario.equals(usuarioGestor) && contrasena.equals(contrasenaGestor) || usuario.equals(usuarioInversor) && contrasena.equals(contrasenaInversor);
+
+        if (usuario.equals(usuarioAdministrador) && contrasena.equals(contrasenaAdministrador) || usuario.equals(usuarioGestor) && contrasena.equals(contrasenaGestor) || usuario.equals(usuarioInversor) && contrasena.equals(contrasenaInversor)) {
+            if (contrasena.equals(contrasenaGestor) || contrasena.equals(contrasenaInversor)) numfallados = 0;
+            return true;
+        }else {
+            if (contrasena.equals(contrasenaGestor) || contrasena.equals(contrasenaInversor)){
+                numfallados++;
+                if (numfallados >= maxIntentos) {
+                    System.out.println("Has excedido el máximo de intentos. Tu cuenta está bloqueada");
+                } else {
+                    System.out.println("Contraseña incorrecta. Tienes " + maxIntentos - numfallados + " intentos.");
+            }
+        } else {
+                System.out.println("Credenciales incorrectas.");
+            }
+            return false;
+        }
     }
 }
 import java.util.Scanner;
