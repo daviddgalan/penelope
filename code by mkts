@@ -2,7 +2,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 public class Final {
-        // Usuarios
         private static final String ADMIN_USUARIO = "admin";
         private static final String ADMIN_CONTRASENA = "adminpass";
         private static final String GESTOR_USUARIO = "gestor";
@@ -11,13 +10,10 @@ public class Final {
         private static final String INVERSOR1_CONTRASENA = "inversorpass1";
         private static final String INVERSOR2_USUARIO = "inversor2";
         private static final String INVERSOR2_CONTRASENA = "inversorpass2";
-
-        // Contadores de intentos fallidos
         private static int intentosFallidosGestor = 0;
         private static int intentosFallidosInversor1 = 0;
         private static int intentosFallidosInversor2 = 0;
-
-        // Proyectos
+        
         private static String nombreProyecto1;
         private static String descripcionProyecto1;
         private static String tipoProyecto1;
@@ -44,8 +40,6 @@ public class Final {
 
         public static void main(String[] args) {
             Scanner scanner = new Scanner(System.in);
-
-            // Inicio de sesión
             System.out.println("Bienvenido al sistema de proyectos. Por favor, inicia sesión.");
 
             while (true) {
@@ -61,17 +55,13 @@ public class Final {
                     System.out.println("Credenciales incorrectas. Intenta nuevamente.");
                 }
             }
-
-            // Menú principal
             while (true) {
                 System.out.println("\nMenú Principal:");
                 System.out.println("1. Crear proyecto (Solo para gestor)");
                 System.out.println("2. Participar en proyecto (Solo para inversores)");
                 System.out.println("3. Salir");
-
                 int opcion = scanner.nextInt();
-                scanner.nextLine();  // Consumir el salto de línea
-
+                scanner.nextLine();
                 switch (opcion) {
                     case 1:
                         if (esGestor()) {
@@ -95,9 +85,6 @@ public class Final {
                 }
             }
         }
-
-        // Funciones auxiliares
-
         private static boolean validarCredenciales(String usuario, String contrasena) {
             if (usuario.equals(ADMIN_USUARIO) && contrasena.equals(ADMIN_CONTRASENA)) {
                 return true;
@@ -111,14 +98,13 @@ public class Final {
                 resetearIntentosFallidosInversor2();
                 return true;
             } else {
-                // Credenciales incorrectas, incrementar intentos fallidos
                 incrementarIntentosFallidos(usuario);
                 return false;
             }
         }
 
         private static boolean esGestor() {
-            return ADMIN_USUARIO.equals(ADMIN_USUARIO);  // Cambiar si es necesario agregar lógica específica para gestores
+            return ADMIN_USUARIO.equals(ADMIN_USUARIO); 
         }
 
         private static boolean esInversor() {
@@ -175,15 +161,11 @@ public class Final {
                 fechaFinProyecto1 = scanner.next();
                 System.out.println("Proyecto 1 creado exitosamente.");
             } else if (nombreProyecto2 == null) {
-                // Repetir proceso para el proyecto 2 (puedes extender para el proyecto 3)
             } else if (nombreProyecto3 == null) {
-                // Repetir proceso para el proyecto 3
             } else {
                 System.out.println("Ya has alcanzado el límite de proyectos. No puedes crear más proyectos.");
             }
         }
         private static void participarEnProyecto(Scanner scanner) {
-            // Lógica para que inversores participen en proyectos
-            // Puedes implementar según tus necesidades específicas
         }
     }
