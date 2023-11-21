@@ -39,7 +39,7 @@ public class funciones {
                 if (numfallados >= maxIntentos) {
                     System.out.println("Has excedido el máximo de intentos. Tu cuenta está bloqueada");
                 } else {
-                    System.out.println("Contraseña incorrecta. Tienes " + maxIntentos - numfallados + " intentos.");
+                    System.out.println("Contraseña incorrecta. Tienes " + (maxIntentos - numfallados) + " intentos.");
             }
         } else {
                 System.out.println("Credenciales incorrectas.");
