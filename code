@@ -23,29 +23,89 @@ public class funciones {
     public static String contrasenaGestor = "1234";
     public static String usuarioInversor = "inversor";
     public static String contrasenaInversor = "1234";
-
+    public static int maxIntentos = 3;
+    public static int numFalladosGestor = 0;
+    public static int numFalladosInversor = 0;
+    public static boolean gestorBloqueado = false;
+    public static boolean inversorBloqueado = false;
+    public static String usuario = null;
+    public static String contrasena = null;
     public static boolean validacion() {
-        System.out.print("Usuario: ");
-        String usuario = ss();
-        System.out.print("Contraseña: ");
-        String contrasena = ss();
 
-        if (usuario.equals(usuarioAdministrador) && contrasena.equals(contrasenaAdministrador) || usuario.equals(usuarioGestor) && contrasena.equals(contrasenaGestor) || usuario.equals(usuarioInversor) && contrasena.equals(contrasenaInversor)) {
-            if (contrasena.equals(contrasenaGestor) || contrasena.equals(contrasenaInversor)) numfallados = 0;
-            return true;
-        }else {
-            if (contrasena.equals(contrasenaGestor) || contrasena.equals(contrasenaInversor)){
-                numfallados++;
-                if (numfallados >= maxIntentos) {
-                    System.out.println("Has excedido el máximo de intentos. Tu cuenta está bloqueada");
-                } else {
-                    System.out.println("Contraseña incorrecta. Tienes " + (maxIntentos - numfallados) + " intentos.");
+            System.out.print("Usuario: ");
+            usuario = ss();
+            System.out.print("Contraseña: ");
+            contrasena = ss();
+
+        if (cuentaBloqueada(usuario)) {
+            System.out.println("La cuenta está bloqueada. Contacta al administrador para desbloquearla.");
+            return false;
+        }
+
+        if (usuario.equals(usuarioAdministrador) && contrasena.equals(contrasenaAdministrador)
+                || usuario.equals(usuarioGestor) && contrasena.equals(contrasenaGestor)
+                || usuario.equals(usuarioInversor) && contrasena.equals(contrasenaInversor)) {
+
+            if (usuario.equals(usuarioGestor)) {
+                numFalladosGestor = 0;
+            } else if (usuario.equals(usuarioInversor)) {
+                numFalladosInversor = 0;
             }
+            return true;
         } else {
+
+            if (usuario.equals(usuarioGestor)) {
+                numFalladosGestor++;
+                bloquearCuentaSiEsNecesario(usuarioGestor);
+            } else if (usuario.equals(usuarioInversor)) {
+                numFalladosInversor++;
+                bloquearCuentaSiEsNecesario(usuarioInversor);
+            } else {
                 System.out.println("Credenciales incorrectas.");
             }
             return false;
         }
+    }
+
+    public static void bloquearCuentaSiEsNecesario(String usuario) {
+        int intentosFallidos = (usuario.equals(usuarioGestor)) ? numFalladosGestor : numFalladosInversor;
+
+        if (intentosFallidos >= maxIntentos) {
+            System.out.println("Has excedido el número máximo de intentos. La cuenta está bloqueada.");
+            if (usuario.equals(usuarioGestor)) {
+                gestorBloqueado = true;
+            } else if (usuario.equals(usuarioInversor)) {
+                inversorBloqueado = true;
+            }
+            System.exit(0);
+        } else {
+            System.out.println("Credenciales incorrectas. Intentos restantes para " + usuario + ": " +
+                    (maxIntentos - intentosFallidos));
+        }
+    }
+    public static boolean cuentaBloqueada(String usuario) {
+        if (usuario.equals(usuarioGestor)) {
+            return gestorBloqueado;
+        } else if (usuario.equals(usuarioInversor)) {
+            return inversorBloqueado;
+        }
+        return false;
+    }
+    public static void menus(){
+        if (usuario.equals(usuarioGestor) && contrasena.equals(contrasenaGestor)){
+        menuGestor();
+        }else if (usuario.equals(usuarioInversor) && contrasena.equals(contrasenaInversor)){
+
+        } else if (usuario.equals(usuarioAdministrador) && contrasena.equals(contrasenaAdministrador)) {
+
+        }else System.out.println("Prueba de nuevo");
+    }
+    public static void menuGestor(){
+        System.out.println("Seleccione una opción: \n" +
+                "1.- Panel de Control.\n" +
+                "2.- Mis proyectos.\n" +
+                "3.- Configuración\n" +
+                "4.- Salir.");
     }
 }
 import java.util.Scanner;
@@ -58,10 +118,13 @@ public class penelope {
             respuesta = si();
             switch (respuesta) {
                 case 1: {
-                    if (validacion()) System.out.println("Has entrado");
-                    else System.out.println("no has entrado");
-
+                    do {
+                        validacion();
+                    }while (!validacion());
+                    menus();
                 }
+                default:
+                    System.out.println("Por favor, ingrese los números 1-2.");
             }
         }while(respuesta != 2);
     }
